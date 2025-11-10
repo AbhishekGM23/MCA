@@ -1,15 +1,4 @@
-/********************************************************
- * Program       : LCD Countdown Display (8-bit Mode)
- * Description   : Displays a countdown from 20 to 0 on a 
- *                 16x2 LCD using 8-bit mode. The count 
- *                 decreases by 1 every second using a 
- *                 software delay.
- * Author        : Abhaya Y, Abhishek G M
- * Board         : ARM7 Development Board
- * Processor     : LPC2148
- * Notes         : LCD connected with data lines on P1.24–P1.31 
- *                 and control lines RS=P1.16, RW=P1.17, EN=P1.18.
- ********************************************************/
+//Displays a countdown from 20
 
 #include <LPC214x.h> // LPC214x register definitions
 
@@ -17,7 +6,7 @@
 #define RS (1<<16) // Register Select
 #define RW (1<<17) // Read/Write
 #define EN (1<<18) // Enable
-#define LCD_DATA_MASK (0xFFu << 24) // Data lines D0–D7 on P1.24–P1.31
+#define LCD_DATA_MASK (0xFFu << 24) // Data lines D0â€“D7 on P1.24â€“P1.31
 
 void pll_init(void);
 void delay_ms(unsigned int ms);
