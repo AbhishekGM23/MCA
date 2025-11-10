@@ -1,64 +1,41 @@
-/********************************************************
- * Program       : Quick Sort Demo
- * Description   : Implements quick sort (divide and conquer);
- *                 stores sorted array at 0x40000000.
- * Author        : Abhaya Y, Abhishek G M
- * Board         : ARM7
- * Processor     : LPC2148
- * Notes         : Final result is written to 0x40000000.
- *                 - For sorting: the sorted array is copied
- *                   starting at 0x40000000 (word-aligned).
- ********************************************************/
-#include <LPC214x.h>
-#include <stdint.h>
+#include <LPC214x.h>   // include LPC2148 header file
 
-#define RESULT_ADDR ((volatile int*)0x40000000)
-	
-static void swap(int *a, int *b) {
+// Function to swap two elements
+void swap(int *a, int *b) {
     int temp = *a;
     *a = *b;
     *b = temp;
 }
 
-static int partition(int arr[], int low, int high) {
-    int pivot = arr[high]; // Choose last element as pivot
-    int i = (low - 1); // Index of smaller element
+// Partition function used by Quick Sort
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high];   // choose last element as pivot
+    int i = low - 1;
     int j;
 
-    /* Traverse array and rearrange elements relative to the pivot */
-    for (j = low; j <= high - 1; j++) {
-        if (arr[j] < pivot) {  // If current element is smaller than pivot
+    for (j = low; j < high; j++) {
+        if (arr[j] < pivot) {
             i++;
             swap(&arr[i], &arr[j]);
         }
     }
-
-    /* Place the pivot element in its correct position */
     swap(&arr[i + 1], &arr[high]);
-    return (i + 1); // Return pivot index
+    return (i + 1);
 }
 
-static void quick_sort(int arr[], int low, int high) {
+// Quick Sort function (recursive)
+void quickSort(int arr[], int low, int high) {
     if (low < high) {
-        int pi = partition(arr, low, high); // Partition the array
-        quick_sort(arr, low, pi - 1); // Sort left sub-array
-        quick_sort(arr, pi + 1, high); // Sort right sub-array
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
     }
 }
 
-int main(void) {
-    /* Input array to be sorted */
-    int arr[] = {33, 12, 98, 56, 7, 41, 67, 25};
-    const int n = sizeof(arr) / sizeof(arr[0]); // Determine array size
-    volatile int *dst = RESULT_ADDR; // Output location pointer
-    int i;
+int main() {
+    int data[5] = {25, 10, 30, 5, 15};  // unsorted array
 
-    /* Perform in-place Quick Sort in ascending order */
-    quick_sort(arr, 0, n - 1);
+    quickSort(data, 0, 4);  // sort array
 
-    for (i = 0; i < n; i++) {
-        dst[i] = arr[i];
-    }
-
-    while (1) {} // Infinite loop to preserve result
+    while (1);  // stop here to check output in Keil memory window
 }
